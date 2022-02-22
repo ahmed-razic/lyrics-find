@@ -14,7 +14,7 @@
 // API
 const endPoint = 'https://api.lyrics.ovh/';
 
-const searchForm = $('#search-fomr');
+const searchForm = $('#search-form');
 const searchButton = $('#search-button');
 const searchInput = $('#search-input');
 
