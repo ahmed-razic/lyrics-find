@@ -75,3 +75,21 @@ function scrollToLyricsResult() {
     );
     hideLyricsLoader();
 }
+
+function showResultsList(artistName, title, index) {
+    searchResultsList.append(`<div class="result__item row d-flex justify-content-center align-items-center text-center text-sm-left">
+    <p class="col-10 col-sm-9 mb-0 result__item__title"><strong>${artistName}</strong> - ${title}</p>
+    <button id="get-lyrics-${index}" class="col-8 col-sm-3 btn button" data-artist="${artistName}" data-title="${title}">Get Lyrics</button>
+</div>`);
+
+    $(`#get-lyrics-${index}`).click(function (e) {
+        getLyrics(e);
+    });
+}
+
+function showLyricsResult(artistName, title, lyrics) {
+    lyricsResultsContainer.html(`
+        <h2><strong>${artistName}</strong> - ${title}</h2>
+        <div class="lyrics">${lyrics}</div>
+    `);
+}

@@ -18,14 +18,75 @@ const searchForm = $('#search-fomr');
 const searchButton = $('#search-button');
 const searchInput = $('#search-input');
 
+function setData(data) {
+    $.each(data, function (index, item) {
+        const artistName = item.artist.name;
+        const title = item.title;
+
+        showResultsList(artistName, title, index);
+    });
+}
+
+function showError() {
+    showLyricsError();
+    scrollToLyricsResult();
+}
+
+function getLyrics(e) {
+    const artist = e.target.dataset.artist;
+    const title = e.target.dataset.title;
+    console.log({ artist, title });
+
+    const url = `${endPoint}v1/${artist}/${title}`;
+
+    showLyricsLoader();
+
+    $.ajax({
+        url: url,
+        success: function (response) {
+            if (response.lyrics === '') {
+                showError();
+                return;
+            }
+            showLyricsResult(artist, title, response.lyrics);
+            scrollToLyricsResult();
+        },
+        error: function () {
+            showError();
+        },
+    });
+}
+
+function searchQuery(query) {
+    query = searchInput.val();
+    if (isInputEmpty(query)) return;
+    const url = `${endPoint}/suggest/${query}`;
+
+    cleanupExistingResults();
+    showResultsContainer();
+    showSearchLoader();
+
+    $.ajax({
+        url: url,
+        success: function (response) {
+            setData(response.data);
+            scrollToSearchResults();
+        },
+        error: function () {
+            showSearchError();
+            scrollToSearchResults();
+        },
+    });
+}
+
 function registerFormEvent() {
     searchForm.submit(function (e) {
         e.preventDefault();
-        console.log(e);
+        searchQuery();
     });
 
     searchButton.click(function (e) {
-        console.log(e);
+        searchQuery();
     });
 }
 
